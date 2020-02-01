@@ -1,4 +1,3 @@
-// Standard headers
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -236,6 +235,9 @@ void *crack_thread() {
         Pipe = popen(cmd, "r");
         while (! feof(Pipe)) {
             if (fgets((char*)&ret, 200, Pipe) == NULL) break;
+            if (strcasestr(ret, "Corrupt file or wrong password") != NULL) {
+                break;
+            }
             if (strcasestr(ret, "ok") != NULL) {
                 strcpy(password_good, current);
                 xmlMutexLock(finishedMutex);
