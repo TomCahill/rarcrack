@@ -235,7 +235,7 @@ void *crack_thread() {
         sprintf((char*)&cmd, finalcmd, current, filename);
         Pipe = popen(cmd, "r");
         while (! feof(Pipe)) {
-            fgets((char*)&ret, 200, Pipe);
+            if (fgets((char*)&ret, 200, Pipe) == NULL) break;
             if (strcasestr(ret, "ok") != NULL) {
                 strcpy(password_good, current);
                 xmlMutexLock(finishedMutex);
@@ -360,7 +360,7 @@ void init(int argc, char **argv) {
         //when we specify the file type, the programm will skip the test
         sprintf((char*)&test, CMD_DETECT, filename);
         totest = popen(test,"r");
-        fscanf(totest,"%s",(char*)&test);
+        if (fscanf(totest,"%s",(char*)&test)) return;
         pclose(totest);
 
         for (i = 0; strcmp(MIME[i],"") != 0; i++) {
